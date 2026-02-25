@@ -42,7 +42,7 @@ st.markdown("""
         }
 
         [data-testid="stMetricValue"] {
-            font-size: 55px !important;
+            font-size: 38px !important;
             line-height: 1.1 !important;
             font-weight: 700;
         }
@@ -133,14 +133,14 @@ with kpi1:
     st.markdown(f"""
         <div style="
             background:white;
-            padding:40px 30px;
+            padding:28px 24px;
             border-radius:22px;
             box-shadow:0 12px 30px rgba(0,0,0,0.08);
         ">
             <div style="font-size:22px;color:#546e7a;">
                 Kopējie ieņēmumi
             </div>
-            <div style="font-size:55px;font-weight:bold;">
+            <div style="font-size:22px;font-weight:bold;">
                 {total_revenue:,.2f} €
             </div>
         </div>
@@ -150,14 +150,14 @@ with kpi2:
     st.markdown(f"""
         <div style="
             background:white;
-            padding:40px 30px;
+            padding:28px 24px;
             border-radius:22px;
             box-shadow:0 12px 30px rgba(0,0,0,0.08);
         ">
             <div style="font-size:22px;color:#546e7a;margin-bottom:15px;">
                 Atgriezumu likme (%)
             </div>
-            <div style="font-size:55px;font-weight:700;color:#2c3e50;">
+            <div style="font-size:222px;font-weight:700;color:#2c3e50;">
                 {return_rate:.1f}%
             </div>
             <div style="
@@ -178,14 +178,14 @@ with kpi3:
     st.markdown(f"""
         <div style="
             background:white;
-            padding:40px 30px;
+            padding:28px 24px;
             border-radius:22px;
             box-shadow:0 12px 30px rgba(0,0,0,0.08);
         ">
             <div style="font-size:22px;color:#546e7a;margin-bottom:15px;">
                 Sūdzību skaits
             </div>
-            <div style="font-size:55px;font-weight:700;color:#2c3e50;">
+            <div style="font-size:22px;font-weight:700;color:#2c3e50;">
                 {linked_complaints}
             </div>
             <div style="
