@@ -42,12 +42,12 @@ st.markdown("""
         }
 
         [data-testid="stMetricValue"] {
-            font-size: 80px !important;
+            font-size: 55px !important;
             line-height: 1.1 !important;
-            font-weight: bold;
+            font-weight: 700;
         }
         [data-testid="stMetricLabel"] {
-            font-size: 22px !important;
+            font-size: 18px !important;
             color: #546e7a !important;
         }
 
@@ -133,14 +133,14 @@ with kpi1:
     st.markdown(f"""
         <div style="
             background:white;
-            padding:70px 40px;
+            padding:40px 30px;
             border-radius:22px;
             box-shadow:0 12px 30px rgba(0,0,0,0.08);
         ">
             <div style="font-size:22px;color:#546e7a;">
                 Kopējie ieņēmumi
             </div>
-            <div style="font-size:85px;font-weight:bold;">
+            <div style="font-size:55px;font-weight:bold;">
                 {total_revenue:,.2f} €
             </div>
         </div>
@@ -150,14 +150,14 @@ with kpi2:
     st.markdown(f"""
         <div style="
             background:white;
-            padding:70px 40px;
+            padding:40px 30px;
             border-radius:22px;
             box-shadow:0 12px 30px rgba(0,0,0,0.08);
         ">
             <div style="font-size:22px;color:#546e7a;margin-bottom:15px;">
                 Atgriezumu likme (%)
             </div>
-            <div style="font-size:85px;font-weight:700;color:#2c3e50;">
+            <div style="font-size:55px;font-weight:700;color:#2c3e50;">
                 {return_rate:.1f}%
             </div>
             <div style="
@@ -178,14 +178,14 @@ with kpi3:
     st.markdown(f"""
         <div style="
             background:white;
-            padding:70px 40px;
+            padding:40px 30px;
             border-radius:22px;
             box-shadow:0 12px 30px rgba(0,0,0,0.08);
         ">
             <div style="font-size:22px;color:#546e7a;margin-bottom:15px;">
                 Sūdzību skaits
             </div>
-            <div style="font-size:85px;font-weight:700;color:#2c3e50;">
+            <div style="font-size:55px;font-weight:700;color:#2c3e50;">
                 {linked_complaints}
             </div>
             <div style="
@@ -203,53 +203,47 @@ with kpi3:
     """, unsafe_allow_html=True)
 
 # 7. VIZUĀĻI (Tavi grafiki ar biezākiem stabiņiem un lielākiem fontiem)
-row1_col1, row1_col2 = st.columns([1.5, 1])
 
-with row1_col1:
-    filtered_df['Week'] = (
-        filtered_df['Date']
-        .dt.to_period('W')
-        .dt.start_time
-    )
-    weekly_data = filtered_df.groupby('Week').agg({'Price': 'sum', 'Status': lambda x: (x == 'Processed').sum()}).reset_index()
-    fig1 = make_subplots(specs=[[{"secondary_y": True}]])
-    fig1.add_trace(go.Scatter(x=weekly_data['Week'], y=weekly_data['Price'], name="Ieņēmumi", mode='lines+markers', line=dict(width=4, color='#3498db')), secondary_y=False)
-    fig1.add_trace(go.Scatter(x=weekly_data['Week'], y=weekly_data['Status'], name="Atgriezumi", mode='lines+markers', line=dict(width=4, color='#e74c3c')), secondary_y=True)
-    fig1.update_layout(**{k: v for k, v in layout_theme.items() if k != 'title'})
-    fig1.update_layout(title_text="<b>IEŅĒMUMU UN ATGRIEZUMU DINAMIKA</b>", hovermode="x unified", height=650, legend=dict(orientation="h", y=1.1))
-    st.plotly_chart(fig1, use_container_width=True)
+filtered_df['Week'] = (
+    filtered_df['Date']
+    .dt.to_period('W')
+    .dt.start_time
+)
+weekly_data = filtered_df.groupby('Week').agg({'Price': 'sum', 'Status': lambda x: (x == 'Processed').sum()}).reset_index()
+fig1 = make_subplots(specs=[[{"secondary_y": True}]])
+fig1.add_trace(go.Scatter(x=weekly_data['Week'], y=weekly_data['Price'], name="Ieņēmumi", mode='lines+markers', line=dict(width=4, color='#3498db')), secondary_y=False)
+fig1.add_trace(go.Scatter(x=weekly_data['Week'], y=weekly_data['Status'], name="Atgriezumi", mode='lines+markers', line=dict(width=4, color='#e74c3c')), secondary_y=True)
+fig1.update_layout(**{k: v for k, v in layout_theme.items() if k != 'title'})
+fig1.update_layout(title_text="<b>IEŅĒMUMU UN ATGRIEZUMU DINAMIKA</b>", hovermode="x unified", height=650, legend=dict(orientation="h", y=1.1))
+st.plotly_chart(fig1, use_container_width=True)
 
-with row1_col2:
-    cat_returns = filtered_df.groupby('Product_Category').agg({'Transaction_ID': 'count', 'Status': lambda x: (x == 'Processed').sum()}).reset_index()
-    cat_returns['Return_Rate'] = (cat_returns['Status'] / cat_returns['Transaction_ID']) * 100
-    cat_returns = cat_returns.sort_values('Return_Rate')
-    colors = {cat: '#e74c3c' if cat == 'Smart Home' else '#34495e' for cat in cat_returns['Product_Category']}
-    fig2 = px.bar(cat_returns, y='Product_Category', x='Return_Rate', orientation='h', text_auto='.1f', color='Product_Category', color_discrete_map=colors)
-    fig2.update_layout(**{k: v for k, v in layout_theme.items() if k != 'title'})
-    fig2.update_layout(title_text="<b>ATGRIEZUMU LIKME PA KATEGORIJĀM (%)</b>", showlegend=False, height=650, bargap=0.15) # Biezāki stabiņi
-    st.plotly_chart(fig2, use_container_width=True)
+cat_returns = filtered_df.groupby('Product_Category').agg({'Transaction_ID': 'count', 'Status': lambda x: (x == 'Processed').sum()}).reset_index()
+cat_returns['Return_Rate'] = (cat_returns['Status'] / cat_returns['Transaction_ID']) * 100
+cat_returns = cat_returns.sort_values('Return_Rate')
+colors = {cat: '#e74c3c' if cat == 'Smart Home' else '#34495e' for cat in cat_returns['Product_Category']}
+fig2 = px.bar(cat_returns, y='Product_Category', x='Return_Rate', orientation='h', text_auto='.1f', color='Product_Category', color_discrete_map=colors)
+fig2.update_layout(**{k: v for k, v in layout_theme.items() if k != 'title'})
+fig2.update_layout(title_text="<b>ATGRIEZUMU LIKME PA KATEGORIJĀM (%)</b>", showlegend=False, height=650, bargap=0.15) # Biezāki stabiņi
+st.plotly_chart(fig2, use_container_width=True)
 
 st.markdown("---")
-row2_col1, row2_col2 = st.columns([1.5, 1])
 
-with row2_col1:
-    complaints_sub = filtered_df[filtered_df['category'] != 'No complaints'].copy()
-    if not complaints_sub.empty:
-        complaints_sub['cat_split'] = complaints_sub['category'].str.split(', ')
-        exploded = complaints_sub.explode('cat_split')
-        complaint_data = exploded['cat_split'].value_counts().reset_index().sort_values('count', ascending=True)
-        nordtech_blues = ['#95a5a6', '#7fb3d5', '#5dade2', '#3498db', '#1b4f72', '#003366']
-        fig3 = px.bar(complaint_data, y='cat_split', x='count', orientation='h', color='cat_split', color_discrete_sequence=nordtech_blues, text_auto=True)
-        fig3.update_traces(textposition='outside', cliponaxis=False, marker_line_color='#2c3e50', marker_line_width=1, opacity=0.9)
-        fig3.update_layout(**{k: v for k, v in layout_theme.items() if k != 'title'})
-        fig3.update_layout(title_text="<b>SŪDZĪBU STRUKTŪRA</b>", showlegend=False, height=650, yaxis=dict(tickfont=dict(size=16)), xaxis=dict(tickfont=dict(size=16)), bargap=0.15) # Biezāki stabiņi
-        st.plotly_chart(fig3, use_container_width=True)
+complaints_sub = filtered_df[filtered_df['category'] != 'No complaints'].copy()
+if not complaints_sub.empty:
+    complaints_sub['cat_split'] = complaints_sub['category'].str.split(', ')
+    exploded = complaints_sub.explode('cat_split')
+    complaint_data = exploded['cat_split'].value_counts().reset_index().sort_values('count', ascending=True)
+    nordtech_blues = ['#95a5a6', '#7fb3d5', '#5dade2', '#3498db', '#1b4f72', '#003366']
+    fig3 = px.bar(complaint_data, y='cat_split', x='count', orientation='h', color='cat_split', color_discrete_sequence=nordtech_blues, text_auto=True)
+    fig3.update_traces(textposition='outside', cliponaxis=False, marker_line_color='#2c3e50', marker_line_width=1, opacity=0.9)
+    fig3.update_layout(**{k: v for k, v in layout_theme.items() if k != 'title'})
+    fig3.update_layout(title_text="<b>SŪDZĪBU STRUKTŪRA</b>", showlegend=False, height=650, yaxis=dict(tickfont=dict(size=16)), xaxis=dict(tickfont=dict(size=16)), bargap=0.15) # Biezāki stabiņi
+    st.plotly_chart(fig3, use_container_width=True)
 
-with row2_col2:
-    st.subheader("⚠️ Produktu kopsavilkums")
-    product_stats = filtered_df.groupby('Product_Name').agg({
-        'Transaction_ID': 'count',
-        'Status': lambda x: (x == 'Processed').sum(),
-        'complaint_count': 'sum'
-    }).rename(columns={'Transaction_ID': 'Pārdošana', 'Status': 'Atgriezumi', 'complaint_count': 'Sūdzības'})
-    st.dataframe(product_stats.sort_values(by='Atgriezumi', ascending=False), use_container_width=True, height=450)
+st.subheader("⚠️ Produktu kopsavilkums")
+product_stats = filtered_df.groupby('Product_Name').agg({
+    'Transaction_ID': 'count',
+    'Status': lambda x: (x == 'Processed').sum(),
+    'complaint_count': 'sum'
+}).rename(columns={'Transaction_ID': 'Pārdošana', 'Status': 'Atgriezumi', 'complaint_count': 'Sūdzības'})
+st.dataframe(product_stats.sort_values(by='Atgriezumi', ascending=False), use_container_width=True, height=450)
