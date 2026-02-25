@@ -140,7 +140,7 @@ with kpi1:
             <div style="font-size:22px;color:#546e7a;">
                 Kopējie ieņēmumi
             </div>
-            <div style="font-size:22px;font-weight:bold;">
+            <div style="font-size:40px;font-weight:bold;">
                 {total_revenue:,.2f} €
             </div>
         </div>
@@ -157,7 +157,7 @@ with kpi2:
             <div style="font-size:22px;color:#546e7a;margin-bottom:15px;">
                 Atgriezumu likme (%)
             </div>
-            <div style="font-size:222px;font-weight:700;color:#2c3e50;">
+            <div style="font-size:40px;font-weight:700;color:#2c3e50;">
                 {return_rate:.1f}%
             </div>
             <div style="
@@ -185,7 +185,7 @@ with kpi3:
             <div style="font-size:22px;color:#546e7a;margin-bottom:15px;">
                 Sūdzību skaits
             </div>
-            <div style="font-size:22px;font-weight:700;color:#2c3e50;">
+            <div style="font-size:40px;font-weight:700;color:#2c3e50;">
                 {linked_complaints}
             </div>
             <div style="
